@@ -35,11 +35,22 @@ export class ExecuteCodeService {
   async executeCode(fileStructure: any) {
     try {
       console.log("reached");
+      console.log(fileStructure.name);
       //   await invokeLambdaToUpdateEFS("/", fileStructure);
 
       //   Create a temporary directory to store the project files
-      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "project-"));
+      const parentDir = path.join(__dirname, "..", "..", "..");
 
+      // Check if the specific directory exists, create or reuse it accordingly.
+      let tempDir = path.join(parentDir);
+
+      if (!fs.existsSync(tempDir)) {
+        // If the directory does not exist, create it.
+        fs.mkdirSync(tempDir);
+        console.log(`Created directory: ${tempDir}`);
+      } else {
+        console.log(`Directory already exists, reusing: ${tempDir}`);
+      }
       // Store projectDir in DB
       // await this.projectRepository.updateProject({
       //   id: parseInt(fileStructure.id),
